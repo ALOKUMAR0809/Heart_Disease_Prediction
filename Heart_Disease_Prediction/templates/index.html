@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ea9494;
+            color: #362e2e;
+            overflow-x: hidden;
+        }
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #prediction-form{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        select{
+            height: 30px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn{
+            padding: 10px;
+            border-radius: 10px;
+            background-color: rgb(0, 106, 255);
+            color: white;
+            border: none;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .result.true {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .result.false {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Heart Disease Prediction</h1>
+        <form id="prediction-form">
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="sex">Sex:</label>
+                <select id="sex" name="sex" required>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cp">Chest Pain Type:</label>
+                <select id="cp" name="cp" required>
+                    <option value="0">0-Asymptomatic</option>
+                    <option value="1">1-Atypical Angina</option>
+                    <option value="2">2-Non-anginal Pain</option>
+                    <option value="3">3-Typical Angina</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="trestbps">Resting Blood Pressure (mm Hg):</label>
+                <input type="number" id="trestbps" name="trestbps" required>
+            </div>
+            <div class="form-group">
+                <label for="chol">Serum Cholesterol (mg/dl):</label>
+                <input type="number" id="chol" name="chol" required>
+            </div>
+            <div class="form-group">
+                <label for="fbs">Fasting Blood Sugar > 120 mg/dl:</label>
+                <select id="fbs" name="fbs" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="restecg">Resting ECG Results:</label>
+                <select id="restecg" name="restecg" required>
+                    <option value="0">0-Normal ECG</option>
+                    <option value="1">1-Abnormal ECG with non-specific ST-T changes</option>
+                    <option value="2">2-Abnormal ECG with definite ST-T changes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="thalach">Maximum Heart Rate Achieved:</label>
+                <input type="number" id="thalach" name="thalach" required>
+            </div>
+            <div class="form-group">
+                <label for="exang">Exercise Induced Angina:</label>
+                <select id="exang" name="exang" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="oldpeak">Oldpeak - ST Depression Induced by Exercise:</label>
+                <input type="number" id="oldpeak" name="oldpeak" required>
+            </div>
+            <div class="form-group">
+                <label for="slope">Slope of Peak Exercise ST Segment:</label>
+                <select id="slope" name="slope" required>
+                    <option value="0">0-Up Sloping</option>
+                    <option value="1">1-Flat sloping</option>
+                    <option value="2">2-Downsloping</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="ca">Number of Major Vessels Colored by Fluoroscopy:</label>
+                <select id="ca" name="ca" required>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="thal">Thallium Stress Test Result:</label>
+                <select id="thal" name="thal" required>
+                    <option value="0">0-Normal</option>
+                    <option value="1">1-Fixed Defect</option>
+                    <option value="2">2-Reversible Defect</option>
+                    <option value="3">3-Irreversible Defect</option>
+        
+                </select>
+            </div>
+            <button type="submit" class="btn">Predict</button>
+        </form>
+        <div class="result" id="result">
+            <h2>Results</h2>
+            <p>Decision Tree Prediction: <span id="prediction_dt"></span></p>
+            <p>Random Forest Prediction: <span id="prediction_rf"></span></p>
+            <p>KNN Prediction: <span id="prediction_knn"></span></p>
+            <p>Naive Bayes Prediction: <span id="prediction_nb"></span></p>
+            <p>Logistic Regression Prediction: <span id="prediction_lg"></span></p>
+            <p>Majority Vote Prediction: <span id="prediction_majority"></span></p>
+        </div>
+    </div>
+    
+    
+
+    <script>
+        document.getElementById('prediction-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+    
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const predictionDT = data.decision_tree === 1 ? 'Heart Disease' : 'No Heart Disease';
+                const predictionRF = data.random_forest === 1 ? 'Heart Disease' : 'No Heart Disease';
+                const predictionKNN = data.knn === 1 ? 'Heart Disease' : 'No Heart Disease';
+                const predictionNB = data.naive_bayes === 1 ? 'Heart Disease' : 'No Heart Disease';
+                const predictionLG = data.logistic_regression === 1 ? 'Heart Disease' : 'No Heart Disease';
+                const majorityVote = data.majority_vote === 1 ? 'Heart Disease' : 'No Heart Disease';
+    
+                document.getElementById('prediction_dt').innerText = predictionDT;
+                document.getElementById('prediction_rf').innerText = predictionRF;
+                document.getElementById('prediction_knn').innerText = predictionKNN;
+                document.getElementById('prediction_nb').innerText = predictionNB;
+                document.getElementById('prediction_lg').innerText = predictionLG;
+                document.getElementById('prediction_majority').innerText = majorityVote;
+    
+                setResultColor('prediction_dt', data.decision_tree);
+                setResultColor('prediction_rf', data.random_forest);
+                setResultColor('prediction_knn', data.knn);
+                setResultColor('prediction_nb', data.naive_bayes);
+                setResultColor('prediction_lg', data.logistic_regression);
+                setResultColor('prediction_majority', data.majority_vote);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    
+        function setResultColor(elementId, prediction) {
+            const element = document.getElementById(elementId);
+            element.classList.remove('true', 'false');
+            element.classList.add(prediction ? 'true' : 'false');
+        }
+    </script>
+    
+</body>
+</html>
